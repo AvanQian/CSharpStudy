@@ -14,6 +14,7 @@ namespace MultiThreadsExample
     public partial class MultiThreadsForm : Form
     {
         private List<Thread> multiThreads = new List<Thread>();
+        private int threadNumber = 1;
         const int iRtbNumber = 4;
         const int iTestNumber = 20;
         string msgThread = string.Empty;
@@ -28,6 +29,11 @@ namespace MultiThreadsExample
         public MultiThreadsForm()
         {
             InitializeComponent();
+
+           this.WindowState = System.Windows.Forms.FormWindowState.Maximized;//maximize form window  
+
+            formWidth = this.Size.Width;  //acquire width for current form 
+            formWidth = this.Size.Height; //acquire height for current form
 
             Thread thread = Thread.CurrentThread;
             lock (lockObj)
@@ -208,6 +214,12 @@ namespace MultiThreadsExample
             {
                 this.txtThread4.AppendText(msg + Environment.NewLine);
             }
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            threadNumber = 1;
+
         }
 
     }
