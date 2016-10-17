@@ -8,9 +8,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("MultiThreadsExample")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Hewlett-Packard")]
+[assembly: AssemblyCompany("Avan Intelligence & Technology")]
 [assembly: AssemblyProduct("MultiThreadsExample")]
-[assembly: AssemblyCopyright("Copyright © Hewlett-Packard 2016")]
+[assembly: AssemblyCopyright("Copyright © AIT 2016")]
+[assembly: AssemblyInformationalVersion("R1A01")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
