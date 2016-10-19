@@ -31,11 +31,14 @@ namespace MultiThreadsExample
         {
             GetThreadNumberFormFile();
             InitializeComponent();
-            DisplayControls();
-            //this.WindowState = System.Windows.Forms.FormWindowState.Maximized;//maximize form window  
 
             formWidth = this.Size.Width;  //acquire width for current form 
             formWidth = this.Size.Height; //acquire height for current form
+            clientWidth = this.ClientSize.Width;
+            clientHeight = this.ClientSize.Height;
+            DisplayControls();
+            //this.WindowState = System.Windows.Forms.FormWindowState.Maximized;//maximize form window  
+                       
 /*
             Thread thread = Thread.CurrentThread;
             lock (lockObj)
@@ -221,8 +224,19 @@ namespace MultiThreadsExample
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-
+            Configuration.threadNumber = 1;
+            SaveThreadNumberToFile();
+            DisplayControls();
         }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            Configuration.threadNumber = 2;
+            SaveThreadNumberToFile();
+            DisplayControls();
+        }
+
+
 
         private void GetThreadNumberFormFile()
         {
@@ -244,16 +258,58 @@ namespace MultiThreadsExample
                         temp = temp.Replace("\t", "");
                     Configuration.threadNumber = int.Parse(temp);
                 }
-            }              
+            }
+            sr.Close();             
+        }
+
+        private void SaveThreadNumberToFile()
+        {
+            string exePath = System.Windows.Forms.Application.ExecutablePath;
+            txtPath = exePath.Remove(exePath.LastIndexOf("\\"));
+            txtPath = txtPath.Remove(txtPath.LastIndexOf("\\"));
+            txtPath = txtPath + "\\Configuration\\ThreadNumberConfiguration.txt";
+            //FileStream fs = new FileStream(txtPath, FileMode.Open);
+            //StreamReader sr = new StreamReader(fs, Encoding.ASCII);
+            StreamWriter sw = new StreamWriter(txtPath, false);
+            string line;
+            line = Configuration.threadNumberDiscription + " " + Configuration.threadNumber + ";";
+            sw.WriteLine(line);
+            sw.Close();
+           /* 
+            while ((line = sw.ReadLine()) != null)
+            {
+                line = line.Remove(line.LastIndexOf(";"));
+                if (line.Contains(Configuration.threadNumberDiscription))
+                {
+                    string temp = line.Substring(Configuration.threadNumberDiscription.Length);
+                    if (temp.Contains(" "))
+                        temp = temp.Replace(" ", "");
+                    if (temp.Contains("\t"))
+                        temp = temp.Replace("\t", "");
+                    if (Configuration.threadNumber != int.Parse(temp))
+                    {
+                        //sr.Close();
+                        StreamWriter sw = new StreamWriter(fs, Encoding.ASCII);
+                        line = Configuration.threadNumberDiscription + " " + Configuration.threadNumber + ";";
+                        sw.WriteLine(line);
+                        sw.Close();
+                    }
+                }
+            }
+            sr.Close();
+            fs.Close();
+            */
         }
 
         private void DisplayControls()
         {
+            //根据线程个数调整大小并显示
             this.btnThread1.Size = this.btnThread2.Size = this.btnThread3.Size = this.btnThread4.Size = new System.Drawing.Size(btnWidth,btnHeight);
+            //label的大小改变不了
             //this.lblThread1.Size = this.lblThread2.Size = this.lblThread3.Size = this.lblThread4.Size = new System.Drawing.Size(lblWidth, lblHeight);
             this.lblThread1.TextAlign = this.lblThread2.TextAlign = this.lblThread3.TextAlign = this.lblThread4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.txtThread1.Location = new System.Drawing.Point(toLeftRight, toTop);
-            this.txtThread1.Size = new System.Drawing.Size((formWidth - toLeftRight * (Configuration.threadNumber + 1)) / Configuration.threadNumber, formHeight - toTop - toBottom);
+            this.txtThread1.Size = new System.Drawing.Size((clientWidth - toLeftRight * (Configuration.threadNumber + 1)) / Configuration.threadNumber, clientHeight - toTop - toBottom);
             this.lblThread1.Location = new System.Drawing.Point(toLeftRight, (toTop + btnHeight - lblHeight) / 2);
             this.btnThread1.Location = new System.Drawing.Point(this.txtThread1.Location.X + this.txtThread1.Size.Width - btnWidth, toTop / 2);
 
@@ -271,7 +327,7 @@ namespace MultiThreadsExample
             this.txtThread4.Size = this.txtThread1.Size;
             this.lblThread4.Location = new System.Drawing.Point(this.txtThread4.Location.X, (toTop + btnHeight - lblHeight) / 2);
             this.btnThread4.Location = new System.Drawing.Point(this.txtThread4.Location.X + this.txtThread4.Size.Width - btnWidth, toTop / 2);
-
+            ////*/
             switch(Configuration.threadNumber)
             {            
                 case 1:
@@ -356,10 +412,23 @@ namespace MultiThreadsExample
             
         }
 
-        private void MultiThreadsForm_Load(object sender, EventArgs e)
+        private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
-
+            Configuration.threadNumber = 3;
+            SaveThreadNumberToFile();
+            DisplayControls();           
         }
+
+        private void toolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            Configuration.threadNumber = 4;
+            SaveThreadNumberToFile();
+            DisplayControls(); 
+        }
+
+        
+
+
           
 
     }

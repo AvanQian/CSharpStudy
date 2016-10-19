@@ -20,6 +20,37 @@
             base.Dispose(disposing);
         }
 
+        protected override void OnResize(System.EventArgs e)
+        {
+            //所有调整窗体大小的动作，不管是最大化/最小化操作都会调用此方法，所以改变大小后都要获取client的大小以调整其中控件的大小
+            base.OnResize(e);
+            if(this.WindowState.Equals(System.Windows.Forms.FormWindowState.Maximized))
+            {
+                clientWidth = this.ClientSize.Width;
+                clientHeight = this.ClientSize.Height;
+            }
+            clientWidth = this.ClientSize.Width;
+            clientHeight = this.ClientSize.Height;
+            DisplayControls();
+        }
+/*
+        //调整大小前会调用此方法
+        protected override void OnResizeBegin(System.EventArgs e)
+        {
+            base.OnResizeBegin(e);
+            beforeResizeSize = this.Size;
+        }
+
+        //调整大小后会调用此方法，因此在结束后也可以获取client的大小
+        protected override void OnResizeEnd(System.EventArgs e)
+        {
+            base.OnResizeEnd(e);
+            clientWidth = this.ClientSize.Width;
+            clientHeight = this.ClientSize.Height;
+        }
+*/
+
+
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -136,7 +167,7 @@
             this.threadNumberSelectionToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1366, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1350, 24);
             this.menuStrip1.TabIndex = 8;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -155,27 +186,30 @@
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(80, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItem1.Text = "1";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(80, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItem2.Text = "2";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(80, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItem3.Text = "3";
+            this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripMenuItem3_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(80, 22);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItem4.Text = "4";
+            this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
             // 
             // btnThread1
             // 
@@ -221,7 +255,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1366, 768);
+            this.ClientSize = new System.Drawing.Size(1350, 730);
             this.Controls.Add(this.btnThread4);
             this.Controls.Add(this.btnThread3);
             this.Controls.Add(this.btnThread2);
@@ -238,7 +272,6 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MultiThreadsForm";
             this.Text = "MultiThreadsDemo(by QW)";
-            this.Load += new System.EventHandler(this.MultiThreadsForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -266,8 +299,10 @@
         private System.Windows.Forms.Button btnThread2;
         private System.Windows.Forms.Button btnThread3;
         private System.Windows.Forms.Button btnThread4;
-        private int formWidth = 1366;
-        private int formHeight = 768;
+        private int formWidth;  //整个form的宽和高
+        private int formHeight;
+        private int clientWidth;    //编辑区域的宽和高
+        private int clientHeight;
         private int toLeftRight = 30;
         private int toTop = 60;
         private int toBottom = 30;
@@ -275,6 +310,7 @@
         private int btnHeight = 25;
         private int lblWidth = 47;  //width of label can't be changed
         private int lblHeight = 13; //height of label can't be changed
+        private System.Drawing.Size beforeResizeSize = System.Drawing.Size.Empty;
     }
 }
 

@@ -1,1 +1,1 @@
-ThreadNumber = 			  4 ;
+ThreadNumber = 2;

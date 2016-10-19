@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("Avan Intelligence & Technology")]
 [assembly: AssemblyProduct("MultiThreadsExample")]
 [assembly: AssemblyCopyright("Copyright © AIT 2016")]
-[assembly: AssemblyInformationalVersion("R1A01")]
+[assembly: AssemblyInformationalVersion("R1A02")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
