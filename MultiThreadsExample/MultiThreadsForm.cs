@@ -19,6 +19,7 @@ namespace MultiThreadsExample
         const int iTestNumber = 20;
         string msgThread = string.Empty;
         string txtPath = string.Empty;
+        private delegate void WriteMessageDelegate(string msg, int threadIndex);
         private delegate void WriteMessageDelegate1(string msg);
         private delegate void WriteMessageDelegate2(string msg);
         private delegate void WriteMessageDelegate3(string msg);
@@ -39,7 +40,7 @@ namespace MultiThreadsExample
             DisplayControls();
             //this.WindowState = System.Windows.Forms.FormWindowState.Maximized;//maximize form window  
                        
-/*
+
             Thread thread = Thread.CurrentThread;
             lock (lockObj)
             {
@@ -48,20 +49,107 @@ namespace MultiThreadsExample
                       String.Format("   Thread Pool: {0}\n", thread.IsThreadPoolThread) +
                       String.Format("   Thread ID: {0}\n", thread.ManagedThreadId);
             }
-            WriteMessage1(msgThread);
-            WriteMessage2(msgThread);
-            WriteMessage3(msgThread);
-            WriteMessage4(msgThread);
-            
-            multiThreads.Add(new Thread(new ThreadStart(ThreadAction0)));
-            multiThreads.Add(new Thread(new ThreadStart(ThreadAction1)));
-            multiThreads.Add(new Thread(new ThreadStart(ThreadAction2)));
-            multiThreads.Add(new Thread(new ThreadStart(ThreadAction3)));
-            multiThreads[0].Start();
-            multiThreads[1].Start();
-            multiThreads[2].Start();
-            multiThreads[3].Start();
- * */
+            for (int threadIndex = 0; threadIndex < Configuration.threadNumber; threadIndex++)
+            {
+                WriteMessage(msgThread,threadIndex);
+            }
+
+            switch (Configuration.threadNumber)
+            {
+                case 1:
+                    multiThreads.Add(new Thread(new ThreadStart(ThreadAction0)));
+                    multiThreads[0].Start();
+                    break;
+
+                case 2:
+                    multiThreads.Add(new Thread(new ThreadStart(ThreadAction0)));
+                    multiThreads.Add(new Thread(new ThreadStart(ThreadAction1)));
+                    multiThreads[0].Start();
+                    multiThreads[1].Start();
+                    break;
+
+                case 3:
+                    multiThreads.Add(new Thread(new ThreadStart(ThreadAction0)));
+                    multiThreads.Add(new Thread(new ThreadStart(ThreadAction1)));
+                    multiThreads.Add(new Thread(new ThreadStart(ThreadAction2)));
+                    multiThreads[0].Start();
+                    multiThreads[1].Start();
+                    multiThreads[2].Start();
+                    break;
+
+                case 4:
+                    multiThreads.Add(new Thread(new ThreadStart(ThreadAction0)));
+                    multiThreads.Add(new Thread(new ThreadStart(ThreadAction1)));
+                    multiThreads.Add(new Thread(new ThreadStart(ThreadAction2)));
+                    multiThreads.Add(new Thread(new ThreadStart(ThreadAction3)));
+                    multiThreads[0].Start();
+                    multiThreads[1].Start();
+                    multiThreads[2].Start();
+                    multiThreads[3].Start();
+                    break;
+
+                default:
+                    break;
+            }
+ 
+        }
+
+        public void WriteMessage(string msg, int threadIndex)
+        {
+            switch (threadIndex)
+            {
+                case 0:
+                    if (this.txtThread1.InvokeRequired)
+                    {
+                        WriteMessageDelegate d = new WriteMessageDelegate(WriteMessage);
+                        this.txtThread1.Invoke(d, new object[] { msg, threadIndex });
+                    }
+                    else
+                    {
+                        this.txtThread1.AppendText(msg + Environment.NewLine);
+                    }
+                    break;
+
+                case 1:
+                    if (this.txtThread2.InvokeRequired)
+                    {
+                        WriteMessageDelegate d = new WriteMessageDelegate(WriteMessage);
+                        this.txtThread2.Invoke(d, new object[] { msg, threadIndex });
+                    }
+                    else
+                    {
+                        this.txtThread2.AppendText(msg + Environment.NewLine);
+                    }
+                    break;
+
+                case 2:
+                    if (this.txtThread3.InvokeRequired)
+                    {
+                        WriteMessageDelegate d = new WriteMessageDelegate(WriteMessage);
+                        this.txtThread3.Invoke(d, new object[] { msg, threadIndex });
+                    }
+                    else
+                    {
+                        this.txtThread3.AppendText(msg + Environment.NewLine);
+                    }
+                    break;
+
+                case 3:
+                    if (this.txtThread4.InvokeRequired)
+                    {
+                        WriteMessageDelegate d = new WriteMessageDelegate(WriteMessage);
+                        this.txtThread4.Invoke(d, new object[] { msg, threadIndex });
+                    }
+                    else
+                    {
+                        this.txtThread4.AppendText(msg + Environment.NewLine);
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+
         }
 
         private void ThreadAction0()
@@ -73,15 +161,10 @@ namespace MultiThreadsExample
             {
                 msg = string.Format("key = {0}, value = Thread1_{1}\n", i, i);
                 Thread.Sleep(100);//sleep to wait for printing message
-                WriteMessage1(msg);
+                WriteMessage(msg,0);
             }
             WriteMessage1("End of printing message for Thread0!");
         }
-        /*
-        private void PrintMsg0(object msg)
-        {
-        }
-        */
 
         private void ThreadAction1()
         {
@@ -97,7 +180,7 @@ namespace MultiThreadsExample
                       String.Format("   Thread Pool: {0}\n", thread.IsThreadPoolThread) +
                       String.Format("   Thread ID: {0}\n", thread.ManagedThreadId);
             }
-            WriteMessage2(msg);
+            WriteMessage(msg,1);
 
             Task<Double> t = Task.Run(() =>
             {
@@ -109,7 +192,7 @@ namespace MultiThreadsExample
                           String.Format("   Thread Pool: {0}\n", mainTask.IsThreadPoolThread) +
                           String.Format("   Thread ID: {0}\n", mainTask.ManagedThreadId);
                 }
-                WriteMessage2(msg);
+                WriteMessage(msg,1);
                 
                 for (int ctr = 1; ctr <= 20; ctr++)
                     tasks.Add(Task.Factory.StartNew(
@@ -123,7 +206,7 @@ namespace MultiThreadsExample
                                      String.Format("   Thread Pool: {0}\n", currentTask.IsThreadPoolThread) +
                                      String.Format("   Thread ID: {0}\n", currentTask.ManagedThreadId);
                            }
-                           WriteMessage2(msg);
+                           WriteMessage(msg,1);
                            
                            long s = 0;
                            for (int n = 0; n <= 999999; n++)
@@ -138,17 +221,17 @@ namespace MultiThreadsExample
 
                 Task.WaitAll(tasks.ToArray());
                 Double grandTotal = 0;
-                WriteMessage2("Means of each task: ");
+                WriteMessage("Means of each task: ",1);
                 foreach (var child in tasks)
                 {
                     msg = string.Format("task ID = {0}, task result = {1}\n", child.Id, child.Result);
-                    WriteMessage2(msg);
+                    WriteMessage(msg,1);
                     grandTotal += child.Result;
                 }
                 return grandTotal / 20;
             });
             msg = string.Format("Mean of Means: {0}", t.Result);
-            WriteMessage2(msg);
+            WriteMessage(msg,1);
         }
 
         private void ThreadAction2()
@@ -236,7 +319,19 @@ namespace MultiThreadsExample
             DisplayControls();
         }
 
+        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            Configuration.threadNumber = 3;
+            SaveThreadNumberToFile();
+            DisplayControls();
+        }
 
+        private void toolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            Configuration.threadNumber = 4;
+            SaveThreadNumberToFile();
+            DisplayControls();
+        }
 
         private void GetThreadNumberFormFile()
         {
@@ -412,19 +507,7 @@ namespace MultiThreadsExample
             
         }
 
-        private void toolStripMenuItem3_Click(object sender, EventArgs e)
-        {
-            Configuration.threadNumber = 3;
-            SaveThreadNumberToFile();
-            DisplayControls();           
-        }
-
-        private void toolStripMenuItem4_Click(object sender, EventArgs e)
-        {
-            Configuration.threadNumber = 4;
-            SaveThreadNumberToFile();
-            DisplayControls(); 
-        }
+        
 
         
 
