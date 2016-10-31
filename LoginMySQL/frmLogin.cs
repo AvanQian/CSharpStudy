@@ -76,7 +76,7 @@ namespace LoginApp.forms
             _mySqlConn = this.Connect2MySql(0);
             List<List<string>> results = this.GetResults("select * from usersinformation.users where UserID like '" + this.tbUserid.Text + "';");
             bool bPass = false;
-            for (int i = 0; i < results.Count; i++ )
+            for (int i = 0; i < results.Count; i++)//if results.Count==0, indicates that last query found nothing matched items 
             {
                 //string userId = results[i][0];
                 string password = results[i][2];
@@ -87,7 +87,8 @@ namespace LoginApp.forms
                 }                    
             }
             if (bPass)
-                MessageBox.Show("Login succeed!");
+                _Authenticated = true;
+                //MessageBox.Show("Login succeed!");
             else
             {
                 if(results.Count == 0)
@@ -97,6 +98,10 @@ namespace LoginApp.forms
             }
             if (ConnectionState.Open == _mySqlConn.State)
                 _mySqlConn.Close();
+
+            //exit after login successed
+            if (bPass)
+                Application.Exit();
 
             /*
             try
